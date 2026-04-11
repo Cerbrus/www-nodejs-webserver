@@ -65,7 +65,7 @@ sudo chown deploy:deploy /home/deploy/.ssh/authorized_keys
 **2. Add a site** — run for each site you want to host:
 
 ```bash
-curl -fsSLO https://raw.githubusercontent.com/Cerbrus/www-nodejs-recipes/master/deployment/add-site.sh
+curl -fsSLO https://raw.githubusercontent.com/Cerbrus/www-nodejs-webserver/master/deployment/add-site.sh
 sudo bash add-site.sh <name> <port> [description] && rm add-site.sh
 ```
 

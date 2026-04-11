@@ -1,8 +1,8 @@
 name: Build & Deploy
 
-on:
-    push:
-        branches: [ develop, master ]
+#on:
+#    push:
+#        branches: [ develop, master ]
 
 jobs:
     build:
