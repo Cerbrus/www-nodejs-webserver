@@ -1,46 +1,20 @@
 import { build, context } from 'esbuild';
-import { sassPlugin } from 'esbuild-sass-plugin';
-import { existsSync, mkdirSync, readdirSync, readFileSync, writeFileSync } from 'fs';
+import { compile } from 'sass';
+import { cpSync, existsSync, mkdirSync, readdirSync, writeFileSync } from 'fs';
 import { basename, dirname, join } from 'path';
 import { fileURLToPath } from 'url';
 import { watch as chokidarWatch } from 'chokidar';
 
-const __dirname = dirname(fileURLToPath(import.meta.url));
-const pagesDir = join(__dirname, 'pages');
-const sharedDir = join(__dirname, 'shared');
-const stylesDir = join(__dirname, 'styles');
-const distDir = join(__dirname, '..', 'www');
+const __srcDir = dirname(fileURLToPath(import.meta.url));
+const pagesDir = join(__srcDir, 'views', 'pages');
+const stylesDir = join(__srcDir, 'styles');
+const distDir = join(__srcDir, '..', 'dist');
+const distPublicDir = join(distDir, 'public');
 const watch = process.argv.includes('--watch');
-
-function readShared() {
-    return {
-        header: readFileSync(join(sharedDir, 'header.html'), 'utf-8'),
-        footer: readFileSync(join(sharedDir, 'footer.html'), 'utf-8'),
-    };
-}
 
 const pages = readdirSync(pagesDir)
     .filter((f) => f.endsWith('.ts'))
     .map((f) => basename(f, '.ts'));
-
-function assembleHtml() {
-    const { header, footer } = readShared();
-
-    for (const page of pages) {
-        const src = join(pagesDir, `${page}.html`);
-        if (!existsSync(src)) continue;
-
-        const body = readFileSync(src, 'utf-8');
-        const titleMatch = body.match(/<!--\s*title:\s*(.+?)\s*-->/);
-        const title = titleMatch ? titleMatch[1] : page;
-
-        const html = header.replace('{{title}}', title) + '\n' + body + '\n' + footer;
-
-        const outDir = join(distDir, page);
-        if (!existsSync(outDir)) mkdirSync(outDir, { recursive: true });
-        writeFileSync(join(outDir, 'index.html'), html);
-    }
-}
 
 const logRebuild = {
     name: 'log-rebuild',
@@ -59,36 +33,62 @@ const logRebuild = {
 
 const entries = pages.map((page) => ({
     entryPoints: [join(pagesDir, `${page}.ts`)],
-    outfile: join(distDir, page, 'index.js'),
+    outfile: join(distPublicDir, 'pages', page, 'index.js'),
     bundle: true,
     format: 'iife',
     target: 'es2020',
-    plugins: [sassPlugin(), logRebuild],
+    plugins: [logRebuild],
 }));
 
+function compileStyles() {
+    for (const page of pages) {
+        const scssPath = join(pagesDir, `${page}.scss`);
+        if (!existsSync(scssPath)) continue;
+
+        const outDir = join(distPublicDir, 'pages', page);
+        if (!existsSync(outDir)) mkdirSync(outDir, { recursive: true });
+
+        const result = compile(scssPath);
+        writeFileSync(join(outDir, 'index.css'), result.css);
+    }
+    console.log('[sass] done');
+}
+
+function copyAssets() {
+    cpSync(join(__srcDir, 'images'), join(distPublicDir, 'images'), { recursive: true });
+    console.log('[copy] images done');
+}
+
+function copyViews() {
+    cpSync(join(__srcDir, 'views'), join(distDir, 'views'), { recursive: true });
+    console.log('[copy] views done');
+}
+
+copyAssets();
+copyViews();
+compileStyles();
+
 if (watch) {
-    assembleHtml();
     const contexts = await Promise.all(entries.map((e) => context(e)));
     await Promise.all(contexts.map((c) => c.watch()));
 
-    // Watch HTML files for changes
-    chokidarWatch([join(pagesDir, '**/*.html'), join(sharedDir, '**/*.html')], {
-        ignoreInitial: true,
-    }).on('all', (event, path) => {
-        console.log(`[html] ${event}: ${path}`);
-        assembleHtml();
-    });
-
-    // Watch SCSS files for changes — rebuild all entries
+    // Watch SCSS files for changes - recompile styles
     chokidarWatch([join(pagesDir, '**/*.scss'), join(stylesDir, '**/*.scss')], {
         ignoreInitial: true,
-    }).on('all', async (event, path) => {
+    }).on('all', (event, path) => {
         console.log(`[scss] ${event}: ${path}`);
-        await Promise.all(contexts.map((c) => c.rebuild()));
+        compileStyles();
+    });
+
+    // Watch views for changes
+    chokidarWatch([join(__srcDir, 'views', '**/*')], {
+        ignoreInitial: true,
+    }).on('all', (event, path) => {
+        console.log(`[views] ${event}: ${path}`);
+        copyViews();
     });
 
     console.log('Watching for changes...');
 } else {
-    assembleHtml();
     await Promise.all(entries.map((e) => build(e)));
 }

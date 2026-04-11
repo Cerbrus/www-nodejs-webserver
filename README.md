@@ -1,4 +1,4 @@
-# Food Recipes
+# Webserver
 
 A simple web server built with Node.js, Express, and Handlebars.
 
@@ -79,7 +79,7 @@ For this project:
 
 ```bash
 curl -fsSLO https://raw.githubusercontent.com/Cerbrus/www-nodejs-webserver/master/deployment/add-site.sh
-sudo bash add-site.sh recipes 3010 "Simple Webserver" && rm add-site.sh
+sudo bash add-site.sh webserver 3010 "Simple Webserver" && rm add-site.sh
 ```
 
 This creates the system user, app directory, systemd service, and grants the `deploy` user permission to restart the service.

@@ -1,15 +1,15 @@
 @use 'sass:color';
 
-@use "../styles/shared";
+@use "../../styles/shared";
 
-@use "../styles/modules/pong.module";
-@use "../styles/modules/clock.module";
-@use "../styles/modules/mascot.module";
-@use "../styles/modules/paw-field.module";
-@use "../styles/modules/pun-ticker.module";
+@use "../../styles/modules/pong.module";
+@use "../../styles/modules/clock.module";
+@use "../../styles/modules/mascot.module";
+@use "../../styles/modules/paw-field.module";
+@use "../../styles/modules/pun-ticker.module";
 
-@use "../styles/animations/ui.animations";
-@use "../styles/animations/wolf.animations";
+@use "../../styles/animations/ui.animations";
+@use "../../styles/animations/wolf.animations";
 
 body {
     min-height: 100vh;
@@ -37,7 +37,7 @@ body {
     width: 100%;
 }
 
-/* 404 glitch number */
+/* Error code glitch number */
 .error-code {
     font-size: clamp(5rem, 15vw, 10rem);
     font-weight: 700;

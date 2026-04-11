@@ -8,7 +8,7 @@ set -euo pipefail
 
 if [ $# -lt 2 ]; then
     echo "Usage: sudo bash add-site.sh <name> <port> [description]"
-    echo "  e.g. sudo bash add-site.sh webserver 3010 \"Simple Webserver\""
+    echo "  e.g. sudo bash add-site.sh webserver 3010 \"Website Name\""
     exit 1
 fi
 

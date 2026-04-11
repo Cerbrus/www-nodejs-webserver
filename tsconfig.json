@@ -11,18 +11,6 @@
         "resolveJsonModule": true,
         "skipLibCheck": true,
         "useDefineForClassFields": false,
-        "baseUrl": "src",
-        "paths": {
-            "server": [
-                "scripts/server"
-            ],
-            "views": [
-                "views"
-            ],
-            "locales": [
-                "locales"
-            ]
-        },
         "forceConsistentCasingInFileNames": true,
         "noImplicitOverride": true,
         "noPropertyAccessFromIndexSignature": true,
@@ -30,7 +18,7 @@
         "noFallthroughCasesInSwitch": true
     },
     "include": [
-        "src/**/*.ts"
+        "src/server/**/*.ts"
     ],
     "exclude": [
         "node_modules",

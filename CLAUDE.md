@@ -1,40 +1,73 @@
-# Food Recipes
+# Cerbrus Webserver
 
-Simple Node.js recipe website using Express and Handlebars, with i18n support (English & Dutch).
+Node.js web server featuring an interactive 404 "Pawge Not Found" error page with animated wolf mascot.
 
 ## Stack
 
 - **Runtime:** Node.js with TypeScript
 - **Framework:** Express 5
 - **Templating:** Handlebars (via express-handlebars)
-- **Styling:** SCSS (compiled via `sass`)
-- **i18n:** i18next + handlebars-i18n (locales: `en`, `nl`)
+- **Styling:** SCSS (compiled via esbuild + sass plugin)
+- **Client bundling:** esbuild (IIFE bundles per page)
 - **Linting/Formatting:** ESLint + Prettier (configs in `.eslintrc.json`, `.prettierrc`)
 
 ## Project structure
 
 ```
 src/
-├── images/     # Source images
-├── pages/      # Folder per page
-│   └── shared/ # shared partials (header, footer, etc.)
-├── scripts/    # Frontend scripts (loaded via <script> in templates)
-├── server/     # Server-side scripts
-│   └── app.ts  # Express entry point (port 3010), route registration
-└── styles/     # SCSS source
-deployment/     # Deployment shell scripts (add-site.sh, setup-pi.sh)
-dist/           # Build output (gitignored)
+├── server/
+│   └── app.ts                # Express entry point (port 3010), Handlebars engine, routes
+├── scripts/                  # Client-side modules (bundled by esbuild via page entry points)
+│   ├── index.ts              # Barrel export
+│   ├── ui/                   # UI modules (clock, mascot, pong, paw-field, pun-ticker)
+│   ├── debug/                # Console ASCII art module
+│   └── helpers/              # DOM and array utilities
+├── views/
+│   ├── layouts/
+│   │   └── main.handlebars   # Shared HTML layout (head, body wrapper, asset links)
+│   └── pages/
+│       ├── 404.handlebars    # 404 page template
+│       ├── 404.ts            # Client-side entry point (esbuild bundles this)
+│       └── 404.scss          # Page-specific SCSS
+├── styles/                   # Shared SCSS
+│   ├── shared.scss           # CSS variables, fonts, resets
+│   ├── animations/           # Keyframe animations (UI + wolf)
+│   └── modules/              # Per-module styles (clock, mascot, pong, etc.)
+├── images/
+│   └── favicon.svg
+└── build.mjs                 # esbuild config: bundles client TS+SCSS, copies views + images
+scripts/                      # Deployment shell scripts (add-site.sh, setup-pi.sh)
+dist/                         # Build output (gitignored)
 ```
 
 ## Commands
 
 - `npm start` — Build and start the server
-- `npm run build` — Compile TypeScript, SCSS, and copy views + images to `dist/`
-- `npm run build:css` — Compile SCSS only
-- `npm run build:copy` — Copy views and images to `dist/`
+- `npm run build` — Compile server TS (`tsc`) + bundle client assets (`build.mjs`)
+- `npm run dev` — Watch mode: rebuild on changes + run server with tsx
+
+## Build output
+
+```
+dist/
+├── server/
+│   └── app.js                # Compiled Express server (tsc)
+├── views/                    # Copied Handlebars templates
+│   ├── layouts/
+│   └── pages/
+└── public/                   # Static assets served by Express
+    ├── pages/
+    │   └── 404/
+    │       ├── index.js      # Bundled client JS (esbuild)
+    │       └── index.css     # Bundled CSS (esbuild + sass)
+    └── images/
+```
 
 ## Conventions
 
 - All source code lives in `src/`; `dist/` is the build output
-- Views live in `src/pages/`
+- Server code (`tsc`) and client code (`esbuild`) have separate build pipelines
+- Each page in `src/views/pages/` has a `.handlebars` template, `.ts` entry point, and `.scss` styles co-located
+- esbuild picks up `.ts` entry points from `src/views/pages/` and bundles them with their SCSS imports
+- Shared styles and animations live in `src/styles/`
 - Images go in `src/images/`

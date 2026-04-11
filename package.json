@@ -2,12 +2,11 @@
     "name": "webserver",
     "version": "1.0.0",
     "description": "",
-    "main": "deployment/app.ts",
+    "main": "dist/server/app.js",
     "scripts": {
-        "start": "yarn build && node dist/scripts/server/app.js",
-        "build": "tsc && yarn build:css && yarn build:copy",
-        "build:css": "sass src/styles/style.scss dist/style.css",
-        "build:copy": "cpx \"src/views/**/*\" dist/views && cpx \"src/images/**/*\" dist/images"
+        "start": "yarn build && node dist/server/app.js",
+        "build": "tsc && node src/build.mjs",
+        "dev": "node src/build.mjs --watch & tsx watch src/server/app.ts"
     },
     "keywords": [],
     "author": "",
@@ -23,7 +22,7 @@
         "@typescript-eslint/eslint-plugin": "8.58.1",
         "@typescript-eslint/parser": "8.58.1",
         "@typescript-eslint/utils": "^8.58.1",
-        "cpx2": "^8.0.2",
+        "chokidar": "^4.0.0",
         "esbuild": "^0.28.0",
         "esbuild-sass-plugin": "^3.7.0",
         "eslint": "~10.2.0",
