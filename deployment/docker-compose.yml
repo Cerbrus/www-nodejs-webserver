@@ -1,0 +1,8 @@
+services:
+    app:
+        image: ghcr.io/cerbrus/webserver:${IMAGE_TAG:-latest}
+        restart: unless-stopped
+        ports:
+            - '0.0.0.0:3010:3010'
+        read_only: true
+        mem_limit: 64m

@@ -9,7 +9,9 @@
     overflow: hidden;
     border: 1px solid rgba(252, 196, 25, 0.15);
     background: rgba(0, 0, 0, 0.3);
-    box-shadow: 0 4px 24px rgba(0, 0, 0, 0.4), inset 0 0 40px rgba(252, 196, 25, 0.03);
+    box-shadow:
+        0 4px 24px rgba(0, 0, 0, 0.4),
+        inset 0 0 40px rgba(252, 196, 25, 0.03);
 }
 
 #pongCanvas {

@@ -44,13 +44,17 @@
 /* Eye blink animation */
 .eye-group {
     &-left {
-        .eye-yellow, .eye-pupil, .eye-ring {
+        .eye-yellow,
+        .eye-pupil,
+        .eye-ring {
             transform-origin: 46.508px 61.358px;
         }
     }
 
     &-right {
-        .eye-yellow, .eye-pupil, .eye-ring {
+        .eye-yellow,
+        .eye-pupil,
+        .eye-ring {
             /* right eye is mirrored, transform-origin stays in local coords */
             transform-origin: 46.508px 61.358px;
         }
@@ -58,8 +62,12 @@
 
     &-left,
     &-right {
-        .eye-yellow, .eye-pupil, .eye-ring {
-            animation: blink 4s infinite ease-in-out, blink2 7s infinite ease-in-out;
+        .eye-yellow,
+        .eye-pupil,
+        .eye-ring {
+            animation:
+                blink 4s infinite ease-in-out,
+                blink2 7s infinite ease-in-out;
         }
 
         .eye-pupil {

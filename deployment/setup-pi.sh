@@ -1,31 +1,11 @@
 #!/usr/bin/env bash
-# Raspberry Pi initial setup — installs Node.js LTS and the deploy user.
+# Raspberry Pi initial setup — updates the system, installs fan control and the login banner.
 # Run once on a fresh Raspberry Pi OS Lite install.
 # Usage: sudo bash setup-pi.sh
 set -euo pipefail
 
 echo "==> Updating system packages"
 apt-get update && apt-get upgrade -y
-
-echo "==> Installing prerequisites"
-apt-get install -y curl ca-certificates gnupg
-
-echo "==> Installing Node.js LTS via NodeSource"
-rm -f /etc/apt/sources.list.d/nodesource.list
-curl -fsSL https://deb.nodesource.com/setup_lts.x | bash -
-apt-get install -y nodejs
-
-echo "Node.js version: $(node --version)"
-echo "npm version:     $(npm --version)"
-
-echo "==> Creating deploy user"
-if ! id "deploy" &>/dev/null; then
-    useradd -m deploy
-    mkdir -p /home/deploy/.ssh
-    chmod 700 /home/deploy/.ssh
-    chown deploy:deploy /home/deploy/.ssh
-    echo "Add your deploy public key to /home/deploy/.ssh/authorized_keys"
-fi
 
 echo "==> Setting up fan control (GPIO 14)"
 FAN_SCRIPT="/usr/local/bin/fan-control.sh"
@@ -101,4 +81,4 @@ cat > /etc/motd << 'MOTD'
 MOTD
 
 echo "==> Setup complete"
-echo "Run add-site.sh to configure individual sites."
+echo "Run install.sh to install the error page server."

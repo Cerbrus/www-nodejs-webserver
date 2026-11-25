@@ -1,5 +1,5 @@
-import { BaseDomModule } from './base-dom.module';
 import { DomHelper } from '../helpers';
+import { BaseDomModule } from './base-dom.module';
 
 const PAW_EMOJIS = [
     '\uD83D\uDC3E',
@@ -24,7 +24,7 @@ export class PawFieldModule extends BaseDomModule {
             const paw = DomHelper.el(
                 'div',
                 { class: 'paw' },
-                PAW_EMOJIS[Math.floor(Math.random() * PAW_EMOJIS.length)]
+                PAW_EMOJIS[Math.floor(Math.random() * PAW_EMOJIS.length)],
             );
             paw.style.left = `${Math.random() * 100}%`;
             paw.style.animationDelay = `${Math.random() * 12}s`;

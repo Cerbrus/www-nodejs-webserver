@@ -3,6 +3,11 @@ interface ErrorContent {
     subtitle: string;
 }
 
+export const fallbackError: ErrorContent = {
+    title: 'Something Went Ruff',
+    subtitle: "Cerbrus isn't sure what happened here.<br>He's sniffing around for clues.",
+};
+
 export const errorPages: Record<number, ErrorContent> = {
     400: {
         title: 'Bark Request',

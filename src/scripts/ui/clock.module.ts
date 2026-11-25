@@ -1,5 +1,5 @@
-import { BaseDomModule } from './base-dom.module';
 import { DomHelper } from '../helpers';
+import { BaseDomModule } from './base-dom.module';
 
 export class ClockModule extends BaseDomModule {
     private display!: HTMLElement;

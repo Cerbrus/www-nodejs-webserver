@@ -1,5 +1,5 @@
-import { BaseDomModule } from './base-dom.module';
 import { DomHelper } from '../helpers';
+import { BaseDomModule } from './base-dom.module';
 
 interface Point {
     x: number;
@@ -10,7 +10,7 @@ interface Ball extends Point {
     vx: number;
     vy: number;
     r: number;
-    trail: Point[];
+    trail: Array<Point>;
 }
 
 interface Paddle {
@@ -103,7 +103,11 @@ export class PongModule extends BaseDomModule {
     }
 
     private onMediaChange(e: MediaQueryListEvent): void {
-        e.matches ? this.stop() : this.start();
+        if (e.matches) {
+            this.stop();
+        } else {
+            this.start();
+        }
     }
 
     private start(): void {
@@ -223,7 +227,7 @@ export class PongModule extends BaseDomModule {
             [y + KNOB_R * 0.6, 1],
             [botY - KNOB_R * 0.6, -1],
             [botY - KNOB_R * 0.6, 1],
-        ] as [number, number][]) {
+        ] as Array<[number, number]>) {
             ctx.beginPath();
             ctx.arc(cx + sign * KNOB_R * 0.55, ky, KNOB_R * 0.7, 0, Math.PI * 2);
             ctx.fill();
@@ -262,7 +266,7 @@ export class PongModule extends BaseDomModule {
             this.ball.x - STEAK_SIZE / 2,
             this.ball.y - STEAK_SIZE / 2,
             STEAK_SIZE,
-            STEAK_SIZE
+            STEAK_SIZE,
         );
 
         // Paddles

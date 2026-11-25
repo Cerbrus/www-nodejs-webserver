@@ -1,15 +1,15 @@
 @use 'sass:color';
 
-@use "../../styles/shared";
+@use '../../styles/shared';
 
-@use "../../styles/modules/pong.module";
-@use "../../styles/modules/clock.module";
-@use "../../styles/modules/mascot.module";
-@use "../../styles/modules/paw-field.module";
-@use "../../styles/modules/pun-ticker.module";
+@use '../../styles/modules/pong.module';
+@use '../../styles/modules/clock.module';
+@use '../../styles/modules/mascot.module';
+@use '../../styles/modules/paw-field.module';
+@use '../../styles/modules/pun-ticker.module';
 
-@use "../../styles/animations/ui.animations";
-@use "../../styles/animations/wolf.animations";
+@use '../../styles/animations/ui.animations';
+@use '../../styles/animations/wolf.animations';
 
 body {
     min-height: 100vh;
@@ -18,8 +18,9 @@ body {
     align-items: center;
     justify-content: center;
     background: var(--bg-dark);
-    background-image: radial-gradient(ellipse at 20% 50%, rgba(var(--accent-gold-rgb), 0.06) 0%, transparent 60%),
-    radial-gradient(ellipse at 80% 50%, rgba(var(--accent-pink-rgb), 0.06) 0%, transparent 60%);
+    background-image:
+        radial-gradient(ellipse at 20% 50%, rgba(var(--accent-gold-rgb), 0.06) 0%, transparent 60%),
+        radial-gradient(ellipse at 80% 50%, rgba(var(--accent-pink-rgb), 0.06) 0%, transparent 60%);
     font-family: 'Fredoka', sans-serif;
     color: var(--text-light);
     overflow-x: hidden;
@@ -89,7 +90,9 @@ body {
     border-radius: 50px;
     cursor: pointer;
     text-decoration: none;
-    transition: transform 0.2s, box-shadow 0.2s;
+    transition:
+        transform 0.2s,
+        box-shadow 0.2s;
     box-shadow: 0 4px 20px rgba(var(--accent-gold-rgb), 0.3);
 
     &:hover {
@@ -106,7 +109,7 @@ body {
 .footer {
     position: fixed;
     bottom: 1rem;
-    
+
     font-size: 0.75rem;
     color: var(--text-muted);
     z-index: 1;
@@ -124,11 +127,11 @@ body {
     pointer-events: none;
     z-index: 100;
     background: repeating-linear-gradient(
-            0deg,
-            rgba(0, 0, 0, 0.03) 0px,
-            rgba(0, 0, 0, 0.03) 1px,
-            transparent 1px,
-            transparent 3px
+        0deg,
+        rgba(0, 0, 0, 0.03) 0px,
+        rgba(0, 0, 0, 0.03) 1px,
+        transparent 1px,
+        transparent 3px
     );
 }
 

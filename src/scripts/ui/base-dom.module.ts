@@ -6,7 +6,7 @@ export abstract class BaseDomModule {
 
         if (!container) {
             console.warn(
-                `Container with id "${containerId}" not found. Unable to initialize ${this.constructor.name}.`
+                `Container with id "${containerId}" not found. Unable to initialize ${this.constructor.name}.`,
             );
             return;
         }

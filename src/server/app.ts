@@ -1,13 +1,18 @@
+import path from 'path';
+
 import express from 'express';
 import { engine } from 'express-handlebars';
-import path from 'path';
-import { errorPages } from './errors.js';
+
+import { errorPages, fallbackError } from './errors.js';
+import { punsFor } from './puns.js';
+
+const ERROR_CODE = /^[45]\d{2}$/;
 
 class App {
     private app = express();
-    private readonly port = 3010;
+    private readonly port = Number(process.env['PORT']) || 3010;
 
-    public async start(): Promise<void> {
+    public start(): void {
         this.configureEngine();
         this.registerRoutes();
         this.app.listen(this.port, () => {
@@ -16,6 +21,7 @@ class App {
     }
 
     private configureEngine(): void {
+        this.app.disable('x-powered-by');
         this.app.engine(
             'handlebars',
             engine({
@@ -26,39 +32,36 @@ class App {
         this.app.set('view engine', 'handlebars');
         this.app.set('views', path.join(__dirname, '../views/pages'));
 
-        this.app.use(express.static(path.join(__dirname, '../public')));
+        this.app.use(express.static(path.join(__dirname, '../public'), { maxAge: '1d' }));
     }
 
-    private renderError(
-        res: express.Response,
-        code: number,
-    ): void {
-        const content = errorPages[code] ?? errorPages[500]!;
-        res.status(code).render('error', {
-            page: 'error',
-            errorCode: code,
-            ...content,
-        });
+    private renderError(res: express.Response, code: number): void {
+        const content = errorPages[code] ?? fallbackError;
+        res.status(code)
+            .set({ 'Cache-Control': 'no-store', 'X-Robots-Tag': 'noindex' })
+            .render('error', {
+                page: 'error',
+                errorCode: code,
+                ...content,
+                punsJson: JSON.stringify(punsFor(code)),
+            });
     }
 
     private registerRoutes(): void {
-        this.app.get('/:page', (req, res, next) => {
-            const page = req.params['page'];
-            const code = Number(page);
+        this.app.get('/:code', (req, res, next) => {
+            const code = req.params['code'];
 
-            if (errorPages[code]) {
-                return this.renderError(res, code);
-            }
+            if (!ERROR_CODE.test(code)) return next();
 
-            res.render(page, { page }, (err, html) => {
-                if (err) return next();
-                res.send(html);
-            });
+            this.renderError(res, Number(code));
         });
 
-        // Catch-all 404
         this.app.use((_req, res) => {
             this.renderError(res, 404);
+        });
+
+        this.app.use((_err: unknown, _req: express.Request, res: express.Response, _next: express.NextFunction) => {
+            this.renderError(res, 500);
         });
     }
 }
