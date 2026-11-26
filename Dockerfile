@@ -1,4 +1,8 @@
-FROM node:26-slim AS build
+FROM node:26-slim AS base
+RUN npm install --global yarn@1.22.22 && npm cache clean --force
+
+
+FROM base AS build
 WORKDIR /repo
 
 COPY package.json yarn.lock ./
@@ -8,7 +12,7 @@ COPY . .
 RUN yarn build
 
 
-FROM node:26-slim
+FROM base
 WORKDIR /app
 
 ENV NODE_ENV=production \
