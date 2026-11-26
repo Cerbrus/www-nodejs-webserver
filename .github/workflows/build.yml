@@ -6,6 +6,7 @@ on:
         paths-ignore:
             - 'docs/**'
             - '**.md'
+            - '.github/workflows/dependabot-helper.yml'
     pull_request:
     workflow_dispatch:
 

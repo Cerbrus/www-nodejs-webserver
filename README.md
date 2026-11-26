@@ -85,3 +85,11 @@ systemctl status fan-control.service
 # Watch CPU temperature and fan state (updates every 2s)
 watch -n 2 'echo "Temp: $(($(cat /sys/class/thermal/thermal_zone0/temp) / 1000))°C | Fan: $(pinctrl get 14 | grep -q "hi" && echo ON || echo OFF)"'
 ```
+
+## Dependency updates
+
+Dependabot alerts and security updates are on: a dependency with a known vulnerability and a fix gets a pull request. There are no scheduled version updates; `yarn outdated` shows what is behind.
+
+`.github/workflows/dependabot-helper.yml` runs every morning and calls the shared reviewer of [Cerbrus/workflows](https://github.com/Cerbrus/workflows): a Claude agent reads each Dependabot pull request that is at least a day old, runs the checks, repairs what is small and clear, and leaves one comment with a verdict. It never merges. What it has to know about this repository is in `.github/dependabot-helper.md`. It needs the repository secret `CLAUDE_CODE_OAUTH_TOKEN` and the Claude GitHub App on this repository.
+
+Only the admin role can push to `master`, because the Pi runs what is there.

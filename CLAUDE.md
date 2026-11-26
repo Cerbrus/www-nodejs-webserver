@@ -13,6 +13,7 @@ The reverse proxy also fetches these pages internally to show its own errors in 
 - **Client bundling:** esbuild (IIFE bundles per page)
 - **Linting/Formatting:** ESLint + Prettier (configs in `eslint.config.mjs`, `.prettierrc`)
 - **Deployment:** container image `ghcr.io/cerbrus/webserver`, pulled by a timer on the Pi (see README)
+- **Dependency updates:** Dependabot security updates only; the shared reviewer of `Cerbrus/workflows` comments on each of its pull requests. Keep `.github/dependabot-helper.md` (what the reviewer has to know about this repository) up to date when commands, routes or the proxy contract change
 
 ## Project structure
 
