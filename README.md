@@ -11,7 +11,7 @@ The error page server behind `error.cerbrus.nl`, built with Node.js, Express, an
 
 Status codes with their own title and text are listed in `src/server/errors.ts`; other codes get a generic page. The puns in the ticker and the browser console follow the kind of error (`src/server/puns.ts`).
 
-The reverse proxy also fetches these pages internally, to show its own errors in place on other hosts. It rewrites `href="/` and `src="/` to `https://error.cerbrus.nl/`, so asset links in the templates have to stay root-absolute. The button below the page adapts: shown in place it offers the site's home page or a retry, on `error.cerbrus.nl` itself it goes back.
+The reverse proxy also fetches these pages internally, to show its own errors in place on other hosts. It rewrites `href="/` and `src="/` to `https://error.cerbrus.nl/`, so asset links in the templates have to stay root-absolute; everything the proxy relies on is in [docs/proxy-contract.md](docs/proxy-contract.md). The button below the page adapts: shown in place it offers the site's home page or a retry, on `error.cerbrus.nl` itself it goes back.
 
 ## Stack
 

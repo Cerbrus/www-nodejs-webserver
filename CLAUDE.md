@@ -2,7 +2,7 @@
 
 Node.js web server behind `error.cerbrus.nl` (and `404.cerbrus.nl`): one interactive error page with animated wolf mascot, served per HTTP status code at `/<status code>` with that status. Anything else answers with the 404 page.
 
-The reverse proxy also fetches these pages internally to show its own errors in place on other `*.cerbrus.nl` hosts, rewriting `href="/` and `src="/` to `https://error.cerbrus.nl/`. Keep asset links root-absolute in exactly that form.
+The reverse proxy also fetches these pages internally to show its own errors in place on other `*.cerbrus.nl` hosts, rewriting `href="/` and `src="/` to `https://error.cerbrus.nl/`. Keep asset links root-absolute in exactly that form. Read `docs/proxy-contract.md` before changing routes, asset paths, the port or how templates link assets: every `*.cerbrus.nl` host depends on it.
 
 ## Stack
 
