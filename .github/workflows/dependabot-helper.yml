@@ -1,0 +1,38 @@
+name: Dependabot reviewer
+
+on:
+    schedule:
+        - cron: '30 5 * * *'
+    workflow_dispatch:
+        inputs:
+            minimum_age_hours:
+                description: Review pull requests that are at least this many hours old
+                default: '24'
+            pull_request:
+                description: Review only this pull request number, whatever its age (empty for all that are due)
+                default: ''
+
+permissions:
+    contents: read
+
+concurrency:
+    group: dependabot-helper
+    cancel-in-progress: false
+
+jobs:
+    review:
+        uses: Cerbrus/workflows/.github/workflows/dependabot-helper.yml@master
+        permissions:
+            contents: write
+            pull-requests: write
+            issues: write
+            actions: read
+            checks: read
+            statuses: read
+            id-token: write
+        with:
+            minimum_age_hours: ${{ inputs.minimum_age_hours || '24' }}
+            pull_request: ${{ inputs.pull_request }}
+            node_version: '26'
+        secrets:
+            CLAUDE_CODE_OAUTH_TOKEN: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
