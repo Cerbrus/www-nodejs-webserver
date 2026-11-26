@@ -73,15 +73,16 @@ if (watch) {
     await Promise.all(contexts.map((c) => c.watch()));
 
     // Watch SCSS files for changes - recompile styles
-    chokidarWatch([join(pagesDir, '**/*.scss'), join(stylesDir, '**/*.scss')], {
+    chokidarWatch([pagesDir, stylesDir], {
         ignoreInitial: true,
+        ignored: (path, stats) => stats?.isFile() && !path.endsWith('.scss'),
     }).on('all', (event, path) => {
         console.log(`[scss] ${event}: ${path}`);
         compileStyles();
     });
 
     // Watch views for changes
-    chokidarWatch([join(__srcDir, 'views', '**/*')], {
+    chokidarWatch([join(__srcDir, 'views')], {
         ignoreInitial: true,
     }).on('all', (event, path) => {
         console.log(`[views] ${event}: ${path}`);

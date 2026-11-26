@@ -1,4 +1,4 @@
-FROM node:24-slim AS build
+FROM node:26-slim AS build
 WORKDIR /repo
 
 COPY package.json yarn.lock ./
@@ -8,7 +8,7 @@ COPY . .
 RUN yarn build
 
 
-FROM node:24-slim
+FROM node:26-slim
 WORKDIR /app
 
 ENV NODE_ENV=production \
